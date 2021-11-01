@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "navbar.html" %}
+{% from "_formhelpers.html" import render_field %}
+{% include "_messages.html" %}
+<div class="form-container-register">
+    <legend>Uživatelský profil uživatele {{ current_user.username }}</legend>
+    <div class="form-container-register">
+        <legend>Správa údajů</legend>
+        <form action="" method="POST">
+            <div class="register-form">
+                {{ form.csrf_token }}
+                <div>{{ render_field(form.username) }}</div>
+                <div>{{ render_field(form.email) }}</div>
+            </div>
+            
+            <div class="personal-form">
+                <!-- <legend>Doručovací údaje</legend> -->
+                <div>{{ render_field(form.surname) }}</div>
+                <div>{{ render_field(form.last_name) }}</div>
+                <div>{{ render_field(form.contact) }}</div>
+                <div>{{ render_field(form.country) }}</div>
+                <div>{{ render_field(form.city) }}</div>
+                <div>{{ render_field(form.adress) }}</div>
+                <div>{{ render_field(form.zipcode) }}</div>  
+            </div>
+            <p><input class="btn btn-hover" type=submit value="Upravit informace"></p>
+        </form>
+    </div>
+
+</div>
+{% endblock content %}

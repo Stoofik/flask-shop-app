@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "navbar.html" %}
+<div class="height">
+    {% include "_messages.html" %}
+    <div class="client-info">
+        <h2>Rekapitulace objednávky</h2>
+        <p><b> Kód objednávky: </b>{{orders.invoice}}</p>
+        <p><b> Stav objednávky: </b>{{orders.status}}</p>
+        <p><b>Jméno a příjmení: </b>{{customer.surname}} {{customer.last_name}}</p>
+        <p><b>Email: </b>{{customer.email}}</p>
+        <p><b>Kontakt: </b>{{customer.contact}}</p>      
+    </div>
+    <h4 style="margin-left: 2rem;">Produkty v objednávce: </h4>
+    <div class="container-order">
+        <em id="ID">ID</em>
+        <em>Název</em>
+        <em>Barva</em>
+        <em>Cena</em>
+        <em>Množství</em>
+        <em id="Discount">Sleva</em>
+        <em>Celkem</em>
+    </div>
+
+    {% for key, product in orders.orders.items() %}
+    {% set discount ="%0.2f" |format((product.discount/100) * product.price|float) %}
+    <form class="container-order" action="{{ url_for('update_cart', code=key) }}" method="POST">
+        <p id="ID">{{loop.index}}</p>
+        <p id="Name">{{product.name}}</p>
+        <p id="Color">{{ product.color|capitalize }}</p>
+        <p id="Price">{{product.price}} kč</p>
+        <p id="Quantity">{{ product.quantity }}</p>
+        {% if product.discount > 0 %}
+        <p id="Discount">{{product.discount}} %</p>
+        {% else %}
+        <p id="NoDiscount">-</p>
+        {% endif %}
+        {% set subTotal = product.quantity|int * product.price|float %}
+        <p>{{"%0.2f"|format((subTotal|float) - discount|float)}} kč</p>
+    </form>
+    {% endfor %}
+    <div class="container-order" style="border: none;">
+        {% if status == "Zaplaceno" %}
+        
+        {% else %}
+        <form action="{{url_for('payment')}}" method="POST">
+            {% set amount = grandTotal.replace(".","") %}
+            <input type="hidden" name="amount" value={{amount}}>
+            <input type="hidden" name="invoice" value={{orders.invoice}}>
+        <script
+            src="https://checkout.stripe.com/checkout.js"
+            class="stripe-button"
+            data-key="pk_test_51IXlX7Ffc8ZAZaBUzoXHr4ZGwoIBbxjw9LLrF7J2jUaSQq5lgzqDWPMFgnKTWLLFQYSDMVrxxsF3QJfc3kP6RlOA00dFdzpiws"
+            data-name="Julči domácí produkty"
+            data-description="Voňavé domácí svíčky"
+            data-amount="{{ amount }}"
+            data-currency="czk">
+        </script>
+        </form>
+        {% endif %}
+        <h5 style="grid-column: 2 / span 2; margin-left: 1rem; align-self: center;"> DPH: {{tax}} kč</h5>
+        <h5 style="grid-column: 4 / span 2; align-self: center;"> Cena celkem : {{grandTotal}} kč</h5>
+    </div>
+</div>
+{% endblock content %}
+
+{{session["Shoppingcart"]}}

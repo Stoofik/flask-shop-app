@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/body.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{url_for('static', filename='logos/favicon_logo.png')}}">
+    <title>{{ title }}</title>
+  </head>
+<body>
+  {% block content %}
+
+  {% endblock content %} 
+  {% include "footer.html" %}
+  <script src="{{ url_for('static', filename='js/app.js') }}">
+  </script>
+</body>
+
+</html>

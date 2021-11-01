@@ -1,0 +1,119 @@
+{% extends "layout.html" %}
+{% block content %}
+<main>
+    {% include "navbar.html" %}
+    {% include "_messages.html" %}
+    <section class="introduction">
+        <div class="container-intro">
+            <h1>Julči domácí produkty</h1>
+            <h2>Nakupte si mé domácí produkty, které ručně vyrábím z medu od mamky Romany! xD</h2>
+            <a href="{{ url_for('home') }}"><h3>Na nákup</h3></a>
+        </div>
+    </section>
+    <section class="presentation">
+        {% if category %}
+            {% for c in category.items %}
+                <div class="card">
+                    <div class="imgBx">
+                        <img src="{{ url_for('static', filename='images/' + c.image_1) }}" alt="{{ c.name }}">
+                        {% if c.discount > 0 %}
+                        <p style="text-shadow: 1px 1px #000; color:red; transform: rotate(-15deg); position: absolute; top:20%; left: 20%">Sleva {{ c.discount }} %</p>
+                        {% endif %}
+                    </div>
+                    <div class="contentBx">
+                        <h3>{{ c.name }}</h3>
+                        <h4 class="price">{{ c.price }} kč</h4>
+                        <form action="{{ url_for('add_cart') }}" method="POST">
+                            <input type="hidden" name="c" value="{{ c.id }}">
+                            <button type="submit" class="buy">Do košíku</button>
+                            <input type="hidden" name="quantity" id="" value="1" min="1" max="{{ c.stock }}"></input>
+                            {% set colors = c.colors.split(",") %}
+                            <select  name="colors" id="colors" style="visibility: hidden;">
+                                {% for color in colors %}
+                                {% set col = color.split(":") %}
+                                    <option value="{{ col[0] }}">{{ col[0]|capitalize }}</option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                        <a href="{{ url_for('single_page', id=c.id) }}" class="buy">Detail</a>
+                    </div>
+                </div>
+            {% endfor %}
+            <!-- <div class="pagination">
+                {% if category.has_prev %}
+                    <a href="{{ url_for('get_category',id=get_cat.id, page=get_cat.prev_num) }}" class="btn btn-hover">Předchozí</a>
+                {% endif %}
+                {% if category.total > 8 %}
+                    {% for page_num in category.iter_pages(left_edge=1, right_edge=2, left_current=1, right_current=2) %}
+                        {% if page_num %}
+                            {% if category.page== page_num %}
+                            <a href="{{ url_for('get_category', id=get_cat.id, page=page_num) }}" class="btn btn-active">{{page_num}}</a>
+                            {% else %}
+                            <a href="{{ url_for('get_category',id=get_cat.id, page=page_num) }}" class="btn btn-hover">{{page_num}}</a>
+                            {% endif %}
+                        {% else %}
+                        ...
+                        {% endif %}
+                    {% endfor %}
+                {% endif %} 
+                {% if category.has_next %}
+                    <a href="{{ url_for('get_category',id=get_cat.id, page=category.next_num) }}" class="btn btn-hover">Další</a>
+                {% endif %}
+            </div> -->
+        {% else %}
+            {% for product in products.items %}
+                <div class=content-section>
+                    <div class="card">
+                        <div class="imgBx">
+                            <img src="{{ url_for('static', filename='images/' + product.image_1) }}" alt="{{ product.name }}">
+                            {% if product.discount > 0 %}
+                            <p style="text-shadow: 1px 1px #000; color:red; transform: rotate(-15deg); position: absolute; top:20%; left: 20%">Sleva {{ product.discount }} %</p>
+                            {% endif %}
+                        </div>
+                        <div class="contentBx">
+                            <h3>{{ product.name }}</h3>
+                            <h4 class="price">{{ product.price }} kč</h4>
+                            <form action="{{ url_for('add_cart') }}" method="POST">
+                                <input type="hidden" name="product_id" value="{{ product.id }}">
+                                <button type="submit" class="buy">Do košíku</button>
+                                <input type="hidden" name="quantity" id="" value="1" min="1" max="{{ product.stock }}"></input>
+                                {% set colors = product.colors.split(",") %}
+                                <select  name="colors" id="colors" style="visibility: hidden;">
+                                    {% for color in colors %}
+                                    {% set col = color.split(":") %}
+                                        <option value="{{ col[0] }}">{{ col[0]|capitalize }}</option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                            <a href="{{ url_for('single_page', id=product.id) }}" class="buy">Detail</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+    </section>
+    <div class="pagination">
+        {% if products.has_prev %}
+                <a href="{{ url_for('home', page=products.prev_num) }}" class="btn btn-hover">Předchozí</a>
+            {% endif %}
+            {% if products.total > 8 %}
+                {% for page_num in products.iter_pages(left_edge=1, right_edge=2, left_current=1, right_current=2) %}
+                    {% if page_num %}
+                        {% if products.page== page_num %}
+                            <a href="{{ url_for('home', page=page_num) }}" class="btn btn-active">{{page_num}}</a>
+                        {% else %}
+                            <a href="{{ url_for('home', page=page_num) }}" class="btn btn-hover">{{page_num}}</a>
+                        {% endif %}
+                        {% else %}
+                            ...
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% if products.has_next %}
+                <a href="{{ url_for('home', page=products.next_num) }}" class="btn btn-hover">Další</a>
+            {% endif %}
+        {% endif %}
+    </div>
+</main>
+
+
+{% endblock content %}

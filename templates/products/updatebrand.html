@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "admin/admin_navbar.html" %}
+{% include "_messages.html" %}
+<main>
+    <div class="container-add-brand">
+        {% if brands %}
+            <h1>Upravit značku</h1>
+            <form action="" method="POST">
+                <input value="{{ updatebrand.name }}" type="text" name="brand">
+                <input type="submit" value="Upravit Značku" class="btn btn-edit">
+            </form>
+        {% else %}
+            <h1>Upravit kategorii</h1>
+            <form action="" method="POST">
+                <input value="{{ updatecat.name }}" type="text" name="category">
+                <input type="submit" value="Upravit kategorii" class="btn btn-edit">
+            </form>
+        {% endif %}
+    </div>
+</main>
+{% endblock content %}

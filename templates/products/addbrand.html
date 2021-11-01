@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "admin/admin_navbar.html" %}
+{% include "_messages.html" %}
+<main>
+    <div class="container-add-brand">
+        {% if brands %}
+            <h1>Přidat značku</h1>
+            <form action="" method="POST">
+                <input type="text" name="brand" class="form-control">
+                <input type="submit" value="Přidat značku" class="btn btn-info mt-2">
+            </form>
+        {% else %}
+            <h1>Přidat kategorii</h1>
+            <form action="" method="POST">
+                <input type="text" name="category" class="form-control">
+                <input type="submit" value="Přidat kategorii" class="btn btn-info mt-2">
+            </form>
+        {% endif %}
+    </div>
+</main>
+{% endblock content %}

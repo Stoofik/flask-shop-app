@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "admin/admin_navbar.html" %}
+{% from "_formhelpers.html" import render_field %}
+{% include "_messages.html" %}
+<div class="form-container-register">
+    <legend>Registrace Admina</legend>
+    <form action="" method="POST">
+        <div class="register-form" style="grid-area: 1 / 2 /1 /3;">
+            {{ form.csrf_token }}
+            <div>{{ render_field(form.username) }}</div>
+            <div>{{ render_field(form.email) }}</div>
+            <div>{{ render_field(form.password) }}</div>
+            <div>{{ render_field(form.confirm_password) }}</div>
+        </div>
+
+        <p style="grid-area: 2 / 2 / 3 / 3; justify-self: end;"><input class="btn btn-hover"  type=submit value="Zaregistrovat se"></p>
+    </form>
+</div>
+{% endblock content %}

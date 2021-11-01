@@ -1,0 +1,76 @@
+<!-- navbar starts -->
+<nav class="display-PC">
+  <ul class="navbar">
+    <li>
+      <a class="nav-link" href="{{url_for('admin')}}">Domů</a>
+    </li>
+    <li>
+      <a class="nav-link" href="{{url_for('addproduct')}}">Přidat produkt</a>
+    </li>
+    <li>
+      <a class="nav-link" href="{{ url_for('brands') }}">Spravovat značky</a>
+    </li>
+    <div class="main-logo">
+      <img src="{{url_for('static', filename='logos/hlavni_logo.png')}}" alt="logo" height="70" width="60">
+    </div>
+    <li>
+        <a class="nav-link" href="{{ url_for('category') }}">Spravovat kategorie</a>
+    </li>
+    {% if email in session %}
+      <li>
+        <a class="nav-link" href="{{ url_for('logout') }}">Odhlásit</a>
+      </li>
+    {% else %}
+      <li>
+        <a class="nav-link"  href="{{ url_for('login') }}">Přihlásit</a>
+      </li>
+      <li>
+        <a class="nav-link" href="{{ url_for('register') }}">Zaregistrovat</a>
+      </li>
+    {% endif %}
+  </ul>
+
+</nav>
+<!-- Mobile view section -->
+<nav class="display-mobile">
+  <div class="main-logo">
+    <img src="{{url_for('static', filename='logos/hlavni_logo.png')}}" alt="logo" height="70" width="60">
+  </div>
+  <ul class="navbar-mobile">
+    <li>
+      <a class="nav-link" href="{{url_for('admin')}}">Domů</a>
+    </li>
+    <li>
+      <a class="nav-link" href="{{url_for('addproduct')}}">Přidat produkt</a>
+    </li>
+    <li>
+      <a class="nav-link" href="{{ url_for('brands') }}">Spravovat značky</a>
+    </li>
+    <li>
+      <a class="nav-link" href="{{ url_for('category') }}">Spravovat kategorie</a>
+    </li>
+    {% if current_user.is_authenticated %}
+      <li>
+        <a class="nav-link" href="{{ url_for('logout') }}">Odhlásit</a>
+      </li>
+    {% else %}
+      <li>
+        <a class="nav-link"  href="{{ url_for('customer_login') }}">Přihlásit</a>
+      </li>
+      <li>
+        <a class="nav-link" href="{{ url_for('customer_register') }}">Zaregistrovat</a>
+      </li>
+    {% endif %}
+    </li>
+  </ul>
+  <div class="cart">
+    <a href="{{ url_for('get_cart') }}"><img src="{{ url_for('static', filename='logos/cart.png') }}" alt="cart" height="50" width="50"></a>
+    <h5> ({{session['Shoppingcart']|length }}) </h5>
+  </div>
+  <div class="burger">
+    <img src="{{url_for('static', filename='logos/burger.png')}}" alt="burger" height="70" width="60">
+  </div>
+</nav>
+
+<script src="{{ url_for('static', filename='js/app.js') }}">
+</script>

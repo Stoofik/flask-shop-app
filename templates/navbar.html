@@ -1,0 +1,122 @@
+<header>
+  <ul class="contact">
+    <li class="phone">
+      <img src="{{url_for('static', filename='logos/phone.png')}}" alt="phone" height="20" width="20">
+      728 028 598
+    </li>
+    <li class="instagram">
+      <img src="{{url_for('static', filename='logos/instagram.png')}}" alt="Instagram" height="20" width="20">
+      JulciProduktyIG
+    </li>
+    <li class="email">
+      <img src="{{url_for('static', filename='logos/email.png')}}" alt="Instagram" height="20" width="20">
+      JulciProdukty@mail.cz
+    </li>
+    <li class="facebook">
+      <img src="{{url_for('static', filename='logos/facebook.png')}}" alt="Instagram" height="20" width="20">
+      JulciProduktyFB
+    </li>
+  </ul>
+</header>
+
+<!-- navbar starts -->
+<nav class="display-PC">
+  <ul class="navbar">
+    <li>
+      <a class="nav-link" href="{{url_for('home')}}">Domů</a>
+    </li>
+    <li>
+      <a class="nav-link" href="{{ url_for('home') }}">O nás</a>
+    </li>
+    <li class="dropdown">
+      <a class="nav-link" href="#">
+        Kategorie
+      </a>
+      <div class="dropdown-content">
+        {% for category in categories %}
+            <a href="{{ url_for('get_category', id=category.id) }}">{{category.name}}</a>
+        {% endfor %}
+      </div>
+    </li>
+  </ul>
+  <div class="main-logo">
+    <img src="{{url_for('static', filename='logos/hlavni_logo.png')}}" alt="logo" height="70" width="60">
+  </div>
+  <ul class="side-bar">
+    {% if current_user.is_authenticated %}
+      <li>
+        <a class="nav-link" href="{{url_for('get_cart')}}" tabindex="-1" aria-disabled="true">Košík ({{session['Shoppingcart']|length }})</a>
+      </li>
+      <li>
+        <a class="nav-link" href="{{ url_for('customer_profile') }}" class="nav-item">{{ current_user.username }}</a>
+      </li>
+      <li>
+        <a class="nav-link" href="{{ url_for('customer_logout') }}">Odhlásit</a>
+      </li>
+    {% else %}
+      <li>
+        <a class="nav-link" href="{{url_for('get_cart')}}" tabindex="-1" aria-disabled="true">Košík ({{session['Shoppingcart']|length }})</a>
+      </li>
+      <li>
+        <a class="nav-link"  href="{{ url_for('customer_login') }}">Přihlásit</a>
+      </li>
+      <li>
+        <a class="nav-link" href="{{ url_for('customer_register') }}">Zaregistrovat</a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
+<!-- Mobile view section -->
+<nav class="display-mobile">
+  <div class="main-logo">
+    <img src="{{url_for('static', filename='logos/hlavni_logo.png')}}" alt="logo">
+  </div>
+  <div class="home">
+    <a href="{{ url_for('home') }}"><img src="{{url_for('static', filename='logos/home_symbol.png')}}" alt="home"></a>
+  </div>
+  <ul class="navbar-mobile">
+    <li>
+      <a class="nav-link" href="{{url_for('home')}}">Domů</a>
+    </li>
+    <li>
+      <a class="nav-link" href="{{url_for('get_cart')}}" tabindex="-1" aria-disabled="true">Košík ({{session['Shoppingcart']|length }})</a>
+    </li>
+    <li>
+      <a class="nav-link" href="{{ url_for('home') }}">O nás</a>
+    </li>
+    <li class="dropdown">
+      <a class="nav-link" href="#">
+        Kategorie
+      </a>
+      <div class="dropdown-content">
+        {% for category in categories %}
+            <a href="{{ url_for('get_category', id=category.id) }}">{{category.name}}</a>
+        {% endfor %}
+      </div>
+    </li>
+    {% if current_user.is_authenticated %}
+      <li>
+        <a class="nav-link" href="{{ url_for('customer_profile') }}" class="nav-item">{{ current_user.username }}</a>
+      </li>
+      <li>
+        <a class="nav-link" href="{{ url_for('customer_logout') }}">Odhlásit</a>
+      </li>
+    {% else %}
+      <li>
+        <a class="nav-link"  href="{{ url_for('customer_login') }}">Přihlásit</a>
+      </li>
+      <li>
+        <a class="nav-link" href="{{ url_for('customer_register') }}">Zaregistrovat</a>
+      </li>
+    {% endif %}
+    </li>
+  </ul>
+  <div class="cart">
+    <a href="{{ url_for('get_cart') }}"><img src="{{ url_for('static', filename='logos/cart.png') }}" alt="cart"></a>
+    <h5> ({{session['Shoppingcart']|length }}) </h5>
+  </div>
+  <div class="burger">
+    <img src="{{url_for('static', filename='logos/burger.png')}}" alt="burger">
+  </div>
+</nav>
+<!-- navbar ends -->

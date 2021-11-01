@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "admin/admin_navbar.html" %}
+{% from "_formhelpers.html" import render_field %}
+{% include "_messages.html" %}
+<div class="form-container-login">
+    <legend>Přihlášení Admina</legend>
+        <form action="" method="POST">
+            {{ form.csrf_token }}
+                {{ render_field(form.email) }}
+                {{ render_field(form.password) }}
+                <p><input class="btn btn-hover" type=submit value="Přihlásit se"></p>
+        </form>
+</div>
+
+
+{% endblock content %}

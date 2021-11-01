@@ -1,0 +1,107 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "navbar.html" %}
+{% include "_messages.html" %}
+
+<div class="shopping-cart-intro">
+    <h2>Vítejte v nákupním košíku</h2>
+    {% set count_items ="%0.2f" |format(session['Shoppingcart']|length)|int %}
+    {% if count_items|int == 1 %}
+        <h3>Celkem máte v košíku {{session['Shoppingcart']|length }} položku:</h3>
+    {% elif count_items <= 4 %}
+        <h3>Celkem máte v košíku {{session['Shoppingcart']|length }} různé položky:</h3>
+    {% else %}
+        <h3>Celkem máte v košíku {{session['Shoppingcart']|length }} různých položek:</h3>
+    {% endif %}
+</div>
+<div class="container-shopping-cart">
+    <div class="shopping-cart-content">
+        <!-- Head -->
+        <em></em>
+        <em>Název</em>
+        <em>Barva</em>
+        <em>Cena</em>
+        <em>Množství</em>
+        <em id="Discount">Sleva</em>
+        <em>Celkem</em>
+        <em>Změnit</em>
+        <em>Odstranit</em>
+        <!-- Head end -->
+
+        <!-- Products -->
+        {% for key, product in session["Shoppingcart"].items() %}
+        {% set discount ="%0.2f" |format((product.discount/100) * product.price|float) %}
+
+        <form action="{{ url_for('update_cart', code=key) }}" method="POST">
+            <img src="{{ url_for('static', filename='images/' + product.image) }}" alt="{{ product.name }}" class="cart-picture">
+            <p class="product-name">{{product.name}}</p>
+                {% set colors = product.colors.split(",") %}
+                
+                <select name="color" id="color">
+                    <option value="{{product.color}}" style="display: none">{{product.color|capitalize}}</option>
+                    {% for color in colors %}
+                        {% set col = color.split(":") %}
+                            <option value="{{ col[0] }}">{{ col[0]|capitalize }}</option>
+                    {% endfor %}
+                </select>
+
+            <p class="cart-price">{{product.price}} kč</p>
+            <p class="quantity"> <input type="number" name="quantity" min="1" max="5" value="{{product.quantity}}"></p>
+            {% if product.discount > 0 %}
+            <p class="discount">{{product.discount}} %</p>
+            {% else %}
+            {% endif %}
+            {% set subtotal = product.quantity|int * product.price|float %}
+            <p class="discount-price">{{"%0.2f"|format((subtotal|float) - discount|float)}} kč</p>
+            <button class="btn btn-edit">Změnit</button>
+            <a class="btn btn-delete modal-btn" onclick="openModal('{{ key }}')">Odstranit</a>
+            <!-- Modal delete product -->
+            <div class="modal-bg" id="{{ key }}" >
+                <div class="modal">
+                    <h3>Opravdu chcete odstranit produkt {{ product.name }}?</h3>
+                    <div class="modal-buttons">
+                        <a href="#" onclick="closeModal()" class="btn btn-edit">Zpět</a>
+                        <button><a class="btn btn-delete" href="{{ url_for('delete_item', id=key)}}">Odstranit!</a></button>
+                        <a class="modal-close"  href="#" onclick="closeModal()">X</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+            
+        {% endfor %}
+    </div>
+    <div class="other">
+        <a class="btn btn-buy" href="{{ url_for('get_order') }}">Pokračovat k objednávce</a>
+        <h5 class="tax-total"> DPH 15% : {{tax}} kč</h5>
+        <h5 class="grand-total">Cena celkem: {{grandtotal}} kč</h5>
+        <button class="btn btn-delete modal-btn" onclick="openModalClear('ClearCart')">Vysypat košík</button>
+        <!-- Modal clear cart -->
+        <div class="modal-bg" id="ClearCart">
+            <div class="modal">
+                <h3>Opravdu chcete vysypat košík?</h3>
+                <div class="modal-buttons">
+                    <button onclick="closeModal()" class="btn btn-edit">Zpět</button>
+                    <a class="btn btn-delete" href="{{ url_for('clear_cart') }}">Vyprázdnit!</a>
+                    <button class="modal-close" onclick="closeModal()">X</button>
+                </div>
+            </div>
+        </div>
+        
+    </div> 
+</div>
+<script>
+    function openModal(id) {
+        document.getElementById(id).classList.add("modal-bg-active");
+    }
+
+    function closeModal() {
+        document.getElementsByClassName("modal-bg-active")[0].classList.remove("modal-bg-active");
+    }
+
+    function openModalClear() {
+        document.getElementById("ClearCart").classList.add("modal-bg-active");
+    }
+</script>
+{% endblock content %}
+
+{{session["Shoppingcart"]}}

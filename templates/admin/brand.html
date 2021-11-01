@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "admin/admin_navbar.html" %}
+{% include "_messages.html" %}
+<main>
+  <h1 style="text-align: center;">Správa značek a kategorií</h1>
+  <div class="container-brand">
+    <em>Sr</em>
+    <em>Název</em>
+    <em>Upravit</em>
+    <em>Odstranit</em>
+    {% if brands %}
+      {% for brand in brands %}
+        <p>{{ loop.index }}</p>
+        <p>{{ brand.name }}</p>
+        <p><a href="{{ url_for('updatebrand', id=brand.id) }}" class="btn btn-edit">Upravit</a></p>
+        <form action="{{ url_for('deletebrand', id=brand.id) }}" method="POST">
+          <input type="submit" value="Odstranit" class="btn btn-delete">
+        </form>
+      {% endfor %}
+    {% else %}
+      {% for category in categories %}
+        <p>{{ loop.index }}</p>
+        <p>{{ category.name }}</p>
+        <p><a href="{{ url_for('updatecat', id=category.id) }}" class="btn btn-edit">Upravit</a></p>
+        <form action="{{ url_for('deletecategory', id=category.id) }}" method="POST">
+          <input type="submit" value="Odstranit" class="btn btn-delete">
+        </form>
+      {% endfor %}
+    {% endif %}
+    <p><a style="grid-column: 2;" href="{{ url_for('addbrand') }}" class="btn btn-success">Přidat značku</a></p>
+    <p><a style="grid-column: 3;" href="{{ url_for('addcat') }}" class="btn btn-success">Přidat kategorii</a></p>
+  </div>
+</main>
+{% endblock content %}

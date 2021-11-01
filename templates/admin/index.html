@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "admin/admin_navbar.html" %}
+{% include "_messages.html" %}
+<div class="shopping-cart-intro">
+  <h2>Panel Admina pro správu produktů</h2>
+</div>
+<main class="admin-index-content">
+    <p>Sr</p>
+    <p>Produkt</p>
+    <p>Cena</p>
+    <p>Sleva</p>
+    <p>Kategorie</p>
+    <p>Náhled</p>
+    <p>Upravit</p>
+    <p>Odstranit</p>
+    {% for product in products %}
+      <p>{{ loop.index }}</p>
+      <p>{{ product.name }}</p>
+      <p>{{ product.price }} kč</p>
+      <p>{{ product.discount }} %</p>
+      <p>{{ product.category.name }}</p>
+      <img src="{{ url_for('static', filename='images/' + product.image_1) }}" width="50" height="40">
+      <p><a href="{{ url_for('updateproduct', id=product.id) }}" class="btn btn-edit">Upravit</a></p>
+      <form action="{{ url_for('deleteproduct', id=product.id) }}" method="POST">
+        <input type="submit" value="Odstranit" class="btn btn-delete">
+      </form>
+  {% endfor %}
+</main>
+{% endblock content %}

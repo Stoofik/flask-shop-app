@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "admin/admin_navbar.html" %}
+{% include "_messages.html" %}
+{% from "_formhelpers.html" import render_field %}
+<h2 style="text-align: center">Přidat produkt</h2>
+<div class="container-add-product">
+    <form action="" method="POST" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        {{ render_field(form.name)}}
+        {{ render_field(form.price)}}
+        {{ render_field(form.discount)}}
+        {{ render_field(form.stock)}}
+
+        <label for="brand">Přidat značku</label>
+        <select name="brand" id="brand" class="" required>
+            <option value="">Vyber značku</option>
+            {% for brand in brands %}
+            <option value="{{brand.id}}">{{ brand.name }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="category">Přidat kategorii</label>
+        <select name="category" id="category" class="" required>
+            <option value="">Přidat kategorii</option>
+            {% for category in categories %}
+            <option value="{{category.id}}">{{ category.name }}</option>
+            {% endfor %}
+        </select>
+
+        {{ render_field(form.description) }}
+        {{ render_field(form.colors) }}
+        {{ render_field(form.image_1, class="images") }}
+        {{ render_field(form.image_2, class="images") }}
+        {{ render_field(form.image_3, class="images") }}
+        <p><input class="btn btn-hover" type=submit value="Přidat produkt"></p>
+    </form>
+</div>
+{% endblock content %}

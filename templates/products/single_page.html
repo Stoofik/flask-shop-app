@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% include "navbar.html" %}
+{% include "_messages.html" %}
+<div class="container-single">
+    <div class="big-image">
+        <img src="{{ url_for('static', filename='images/' + product.image_1) }}" alt="{{ product.name }}" id="b_image">
+    </div>
+    <div class="product-info">
+        <h4>{{ product.name }}</h4>
+        <p>Cena: {{ product.price }} kč</p>
+        {% if product.discount %}
+            <p>Sleva: {{ product.discount }} %</p>
+        {% endif %}
+        <b>Popis produktu:</b>
+        <p class="popis">{{ product.desc }} Lorem ipsum dolor sit, amet consectetur adipisicing elit. Exercitationem perspiciatis eum 
+            quia cum reiciendis tempore hic, consequatur quo deserunt ipsa. Lorem ipsum dolor, sit amet consectetur adipisicing elit. 
+            Possimus ut enim aut delectus blanditiis, vel dicta architecto doloribus eius voluptates. Lorem ipsum dolor sit amet.
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos expedita laudantium rerum dolores voluptatibus optio! Sunt omnis, 
+            aliquam veniam adipisci deserunt assumenda a tenetur sit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, culpa?
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatem, hic. Non repellat nulla dolore, fugiat at totam facere sed debitis.
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dignissimos accusamus eos molestias tempore assumenda corporis saepe deserunt quos qui minima!</p>
+    </div>
+    <div class="ilustration-images">
+        <img onclick="change1()" class="s_image" src="{{ url_for('static', filename='images/' + product.image_1) }}" alt="{{ product.name }}" id="s_image">
+        <img onclick="change2()" class="s_image" src="{{ url_for('static', filename='images/' + product.image_2) }}" alt="{{ product.name }}" id="s_image">
+        <img onclick="change3()" class="s_image" src="{{ url_for('static', filename='images/' + product.image_3) }}" alt="{{ product.name }}" id="s_image">
+    </div>
+    <div class="product-buy">
+        <form action="{{ url_for('add_cart') }}" method="POST">
+            <label for="">Množství: </label>
+            <input type="number" name="quantity" id="" value="1" min="1" max="{{ product.stock }}"></input>
+            {% set colors = product.colors.split(",") %}
+            <label  class="label-color" for="colors">Barva: </label>
+            <select name="colors" id="">
+                {% for color in colors %}
+                    {% set col = color.split(":") %}
+                        <option value="{{ col[0] }}">{{ col[0]|capitalize }}</option>
+                {% endfor %}
+            </select>
+            <input type="hidden" name="product_id" value="{{ product.id }}">
+            <button type="submit" class="btn-buy">Koupit</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    var b_image = document.getElementById("b_image");
+    
+    function change1() {
+        b_image.src="{{ url_for('static', filename='images/' + product.image_1) }}";
+    }
+    function change2() {
+        b_image.src="{{ url_for('static', filename='images/' + product.image_2) }}";
+    }
+    function change3() {
+        b_image.src="{{ url_for('static', filename='images/' + product.image_3) }}";
+    }
+
+
+</script>
+<!-- 
+<script>
+    var b_image = document.getElementById("b_image");
+    var s_image = document.getElementById("s_image").getElementsByTagName("img");
+
+    function full_image() {
+        var ImageSRC = this.getAttribute('src');
+        b_image.innerHTML = "<img src=" + ImageSRC + " width='400' height='400'>"
+    }
+    
+    for (var i = 0; i < s_image.length; i++){
+        s_image[i].addEventListener("click", full_image);
+    }
+
+</script> -->
+{% endblock content %}
